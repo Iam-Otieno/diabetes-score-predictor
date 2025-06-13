@@ -1,0 +1,39 @@
+# Use python 3.11 slim image
+FROM python:3.11-slim
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Set environment variables to prevent Python from writing .pyc files and to ensure output is sent straight to the terminal
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install pip and set it up to not cache packages
+RUN apt-get install -y python3-pip && \
+    pip install --no-cache-dir --upgrade pip
+# Copy the requirements.txt file into the working directory
+COPY requirements.txt /app/requirements.txt
+
+# Copy the requirements.txt file into the container
+COPY requirements.txt .
+
+# Install the dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the application code into the container
+COPY . .
+
+# Expose the port on which the FastAPI app will run
+EXPOSE 8000
+# Command to run the FastAPI application using uvicorn
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Set the entrypoint to run the application
+# ENTRYPOINT ["uvicorn", "main:app", "--host", "         0.0.0.0", "--port", "8000"]
+
+
