@@ -35,5 +35,7 @@ EXPOSE 8000
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
 # Set the entrypoint to run the application
 # ENTRYPOINT ["uvicorn", "main:app", "--host", "         0.0.0.0", "--port", "8000"]
+# Note: The entrypoint is commented out as the CMD instruction is sufficient for running the app.
+# If you want to use the entrypoint, uncomment the ENTRYPOINT line above.
 
 
